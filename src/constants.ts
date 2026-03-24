@@ -6,7 +6,7 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
     name: 'Chenxi',
     role: 'Founder & Main Brand',
     description: 'The human behind the lab. Currently navigating the "Spring Job Hunting Season" with a cup of caffeine and a lot of hope.',
-    avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=400',
+    avatar: '/chenxi-cats-drink-lab/chenxi_head.jpg',
     drinkLine: {
       id: 'chenxi-line',
       title: 'Chenxi\'s Lab Notes',
@@ -101,7 +101,7 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
     name: 'Kiro',
     role: 'Chief Nap Officer',
     description: 'A fluffy white cloud with a penchant for sunbeams and expensive tuna.',
-    avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=400',
+    avatar: '/chenxi-cats-drink-lab/kiro_head.jpg',
     drinkLine: {
       id: 'kiro-line',
       title: 'Kiro\'s Cloudy World',

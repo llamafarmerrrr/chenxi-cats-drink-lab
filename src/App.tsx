@@ -5,15 +5,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Music, 
-  Pause, 
-  Play, 
-  ChevronRight, 
-  X, 
-  Info, 
-  Coffee, 
-  Cat, 
+import {
+  Music,
+  Pause,
+  Play,
+  ChevronRight,
+  X,
+  Info,
+  Coffee,
+  Cat,
   ArrowLeft,
   ChevronDown,
   User as UserIcon,
@@ -24,14 +24,14 @@ import { FamilyMember, Drink, Menu } from './types';
 
 const DrinkDetail = ({ drink, onClose }: { drink: Drink; onClose: () => void }) => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
       onClick={onClose}
     >
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
@@ -39,13 +39,13 @@ const DrinkDetail = ({ drink, onClose }: { drink: Drink; onClose: () => void }) 
         onClick={e => e.stopPropagation()}
       >
         <div className="relative h-64 sm:h-80">
-          <img 
-            src={drink.image} 
-            alt={drink.name} 
+          <img
+            src={drink.image}
+            alt={drink.name}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <button 
+          <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
           >
@@ -62,7 +62,7 @@ const DrinkDetail = ({ drink, onClose }: { drink: Drink; onClose: () => void }) 
           </div>
           <h2 className="text-3xl font-serif mb-2">{drink.name}</h2>
           <p className="text-stone-500 mb-8 italic">{drink.description}</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-xs uppercase tracking-widest font-bold text-stone-400 mb-4">Ingredients</h3>
@@ -93,13 +93,13 @@ const DrinkDetail = ({ drink, onClose }: { drink: Drink; onClose: () => void }) 
   );
 };
 
-const MemberSection = ({ 
-  member, 
-  isActive, 
-  onClick 
-}: { 
-  member: FamilyMember; 
-  isActive: boolean; 
+const MemberSection = ({
+  member,
+  isActive,
+  onClick
+}: {
+  member: FamilyMember;
+  isActive: boolean;
   onClick: () => void;
   key?: string;
 }) => {
@@ -109,7 +109,7 @@ const MemberSection = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Sort menus by release date (descending)
-  const sortedMenus = [...member.drinkLine.menus].sort((a, b) => 
+  const sortedMenus = [...member.drinkLine.menus].sort((a, b) =>
     new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
   );
 
@@ -130,11 +130,10 @@ const MemberSection = ({
   }, [isActive, isPlaying]);
 
   return (
-    <motion.section 
+    <motion.section
       layout
-      className={`relative h-full transition-all duration-700 ease-in-out overflow-hidden ${
-        isActive ? 'flex-[4] sm:flex-[5]' : 'flex-1 cursor-pointer hover:opacity-80'
-      } ${member.drinkLine.themeColor}`}
+      className={`relative h-full transition-all duration-700 ease-in-out overflow-hidden ${isActive ? 'flex-[4] sm:flex-[5]' : 'flex-1 cursor-pointer hover:opacity-80'
+        } ${member.drinkLine.themeColor}`}
       onClick={() => {
         if (!isActive) {
           onClick();
@@ -142,7 +141,7 @@ const MemberSection = ({
         }
       }}
     >
-      <audio 
+      <audio
         ref={audioRef}
         loop
         src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808f3030c.mp3"
@@ -157,7 +156,7 @@ const MemberSection = ({
         {/* Header */}
         <div className="flex justify-between items-start mb-12">
           <div className="flex items-center gap-4">
-            <motion.div 
+            <motion.div
               layoutId={`avatar-${member.id}`}
               className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white shadow-sm"
             >
@@ -168,7 +167,7 @@ const MemberSection = ({
               <p className="text-[10px] sm:text-xs uppercase tracking-widest text-stone-500">{member.role}</p>
             </div>
           </div>
-          
+
           {isActive && (
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex flex-col items-end">
@@ -189,7 +188,7 @@ const MemberSection = ({
                   />
                 ))}
               </div>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsPlaying(!isPlaying);
@@ -203,7 +202,7 @@ const MemberSection = ({
         </div>
 
         {isActive ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -211,7 +210,7 @@ const MemberSection = ({
           >
             <AnimatePresence mode="wait">
               {!selectedMenu ? (
-                <motion.div 
+                <motion.div
                   key="menu-list"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -235,7 +234,7 @@ const MemberSection = ({
                         <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-400">Main Menu</span>
                         <div className="h-[1px] flex-1 bg-stone-200" />
                       </div>
-                      <motion.div 
+                      <motion.div
                         whileHover={{ x: 10 }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -265,7 +264,7 @@ const MemberSection = ({
                     </div>
 
                     {sortedMenus.map((menu) => (
-                      <motion.div 
+                      <motion.div
                         key={menu.id}
                         whileHover={{ x: 10 }}
                         onClick={(e) => {
@@ -291,14 +290,14 @@ const MemberSection = ({
                   </div>
                 </motion.div>
               ) : (
-                <motion.div 
+                <motion.div
                   key="drink-list"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   className="flex-1 flex flex-col overflow-hidden"
                 >
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMenu(null);
@@ -316,7 +315,7 @@ const MemberSection = ({
                   <div className="flex-1 overflow-y-auto no-scrollbar pr-2 pb-20">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {selectedMenu.drinks.map((drink) => (
-                        <motion.div 
+                        <motion.div
                           key={drink.id}
                           whileHover={{ y: -5 }}
                           onClick={(e) => {
@@ -326,9 +325,9 @@ const MemberSection = ({
                           className="glass p-4 rounded-2xl cursor-pointer group"
                         >
                           <div className="aspect-video rounded-xl overflow-hidden mb-4">
-                            <img 
-                              src={drink.image} 
-                              alt={drink.name} 
+                            <img
+                              src={drink.image}
+                              alt={drink.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                               referrerPolicy="no-referrer"
                             />
@@ -350,12 +349,12 @@ const MemberSection = ({
           </motion.div>
         ) : (
           <div className="flex-1 flex flex-col justify-center items-center">
-            <motion.div 
+            <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 4 }}
               className="text-stone-300"
             >
-              {member.id === 'chenxi' ? <UserIcon size={48} /> : <Cat size={48} />}
+              src={window.location.hostname === 'localhost' ? '/logo.svg' : '/chenxi-cats-drink-lab/logo.svg'}
             </motion.div>
             <p className="mt-8 vertical-text uppercase tracking-[0.5em] text-stone-400 text-xs font-bold">
               {member.name}
@@ -386,28 +385,27 @@ export default function App() {
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-6 py-4 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}>
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-6 py-4 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <span className="font-serif text-xl tracking-tighter">CHENXI & CATS</span>
-            <span className="text-[10px] bg-stone-900 text-white px-2 py-0.5 rounded-full uppercase font-bold">Lab</span>
+            src={window.location.hostname === 'localhost' ? '/logo.svg' : '/chenxi-cats-drink-lab/logo.svg'}
+            <span className="font-serif text-xl tracking-tighter">Kiro, Canelé & Chenxi</span>
           </div>
           <div className="flex gap-8 text-xs uppercase tracking-widest font-bold text-stone-500">
-            <button 
+            <button
               onClick={() => setActiveMemberId('chenxi')}
               className={`hover:text-stone-900 transition-colors ${activeMemberId === 'chenxi' ? 'text-stone-900' : ''}`}
             >
               Chenxi
             </button>
-            <button 
+            <button
               onClick={() => setActiveMemberId('kiro')}
               className={`hover:text-stone-900 transition-colors ${activeMemberId === 'kiro' ? 'text-stone-900' : ''}`}
             >
               Kiro
             </button>
-            <button 
+            <button
               onClick={() => setActiveMemberId('canele')}
               className={`hover:text-stone-900 transition-colors ${activeMemberId === 'canele' ? 'text-stone-900' : ''}`}
             >
@@ -420,7 +418,7 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col sm:flex-row h-screen pt-16 overflow-hidden">
         {FAMILY_MEMBERS.map((member) => (
-          <MemberSection 
+          <MemberSection
             key={member.id}
             member={member}
             isActive={activeMemberId === member.id}
@@ -435,7 +433,8 @@ export default function App() {
         <span className="text-[10px] uppercase tracking-widest font-bold">Scroll or Tap to Explore</span>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .vertical-text {
           writing-mode: vertical-rl;
           text-orientation: mixed;
