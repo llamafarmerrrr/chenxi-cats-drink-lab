@@ -354,7 +354,7 @@ const MemberSection = ({
               transition={{ repeat: Infinity, duration: 4 }}
               className="text-stone-300"
             >
-              src={window.location.hostname === 'localhost' ? '/logo.svg' : '/chenxi-cats-drink-lab/logo.svg'}
+              {member.id === 'chenxi' ? <UserIcon size={48} /> : <Cat size={48} />}
             </motion.div>
             <p className="mt-8 vertical-text uppercase tracking-[0.5em] text-stone-400 text-xs font-bold">
               {member.name}
@@ -389,7 +389,7 @@ export default function App() {
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
-            src={window.location.hostname === 'localhost' ? '/logo.svg' : '/chenxi-cats-drink-lab/logo.svg'}
+            <img src="/chenxi-cats-drink-lab/logo.svg" alt="logo" className="h-8" />
             <span className="font-serif text-xl tracking-tighter">Kiro, Canelé & Chenxi</span>
           </div>
           <div className="flex gap-8 text-xs uppercase tracking-widest font-bold text-stone-500">
