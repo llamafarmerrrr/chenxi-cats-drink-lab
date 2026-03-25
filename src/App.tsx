@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Music,
@@ -361,9 +361,11 @@ const MemberSection = ({
 export default function App() {
   const [activeMemberId, setActiveMemberId] = useState<string>('chenxi');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [audioReady, setAudioReady] = useState(false);
+  // FIX 3: track whether user has interacted (to hide mobile indicator)
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -371,52 +373,79 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const unlock = () => {
-      setAudioUnlocked(true);
-      window.removeEventListener('click', unlock);
-    };
-    window.addEventListener('click', unlock);
-    return () => window.removeEventListener('click', unlock);
-  }, []);
-
   const activeMember = FAMILY_MEMBERS.find(m => m.id === activeMemberId)!;
 
-  // 切换成员或解锁音频时，加载并播放对应音源
+  // FIX 1: Mobile audio — unlock audio on first user gesture (touch or click)
+  // by directly calling play() inside the event handler (synchronous with gesture)
+  const tryPlayAudio = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.src !== window.location.origin + activeMember.drinkLine.audioSrc &&
+      audio.src !== activeMember.drinkLine.audioSrc) {
+      audio.src = activeMember.drinkLine.audioSrc;
+      audio.load();
+    }
+    if (isPlaying) {
+      const p = audio.play();
+      if (p) {
+        p.then(() => setAudioReady(true)).catch(() => { });
+      }
+    }
+  }, [activeMember, isPlaying]);
+
+  // On first user interaction (touch/click), directly play audio
+  useEffect(() => {
+    const unlock = () => {
+      setHasInteracted(true);
+      tryPlayAudio();
+      window.removeEventListener('click', unlock);
+      window.removeEventListener('touchstart', unlock);
+    };
+    window.addEventListener('click', unlock, { once: true });
+    window.addEventListener('touchstart', unlock, { once: true });
+    return () => {
+      window.removeEventListener('click', unlock);
+      window.removeEventListener('touchstart', unlock);
+    };
+  }, [tryPlayAudio]);
+
+  // When switching members, load new audio and play
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.src = activeMember.drinkLine.audioSrc;
     audio.load();
-    if (audioUnlocked && isPlaying) {
+    if (audioReady && isPlaying) {
       audio.play().catch(() => { });
     }
-  }, [activeMemberId, audioUnlocked]);
+  }, [activeMemberId]);
 
-  // 手动点暂停/播放按钮时
+  // When toggling play/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (isPlaying && audioUnlocked) {
+    if (isPlaying && audioReady) {
       audio.play().catch(() => { });
     } else {
       audio.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, audioReady]);
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
       <audio ref={audioRef} loop />
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-6 py-4 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+      {/* Navigation — FIX 2: mobile layout uses stacked logo + horizontal nav */}
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-4 sm:px-6 py-3 sm:py-4 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Logo area — hide text on mobile, show only icon */}
           <div className="flex items-center gap-2">
-            <img src="/chenxi-cats-drink-lab/logo.svg" alt="logo" className="h-8" />
-            <span className="font-serif text-xl tracking-tighter">Kiro, Canelé & Chenxi</span>
+            <img src="/chenxi-cats-drink-lab/logo.svg" alt="logo" className="h-7 sm:h-8" />
+            <span className="hidden sm:inline font-serif text-xl tracking-tighter">Kiro, Canelé & Chenxi</span>
           </div>
-          <div className="flex gap-8 text-xs uppercase tracking-widest font-bold text-stone-500">
+          {/* Nav buttons — smaller text + tighter gaps on mobile */}
+          <div className="flex gap-4 sm:gap-8 text-[10px] sm:text-xs uppercase tracking-widest font-bold text-stone-500">
             <button
               onClick={() => setActiveMemberId('chenxi')}
               className={`hover:text-stone-900 transition-colors ${activeMemberId === 'chenxi' ? 'text-stone-900' : ''}`}
@@ -453,11 +482,13 @@ export default function App() {
         ))}
       </main>
 
-      {/* Footer / Mobile Indicator */}
-      <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-stone-400 animate-bounce">
-        <ChevronDown size={20} />
-        <span className="text-[10px] uppercase tracking-widest font-bold">Scroll or Tap to Explore</span>
-      </div>
+      {/* Footer / Mobile Indicator — FIX 3: hide after user interacts */}
+      {!hasInteracted && (
+        <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-stone-400 animate-bounce">
+          <ChevronDown size={20} />
+          <span className="text-[10px] uppercase tracking-widest font-bold">Scroll or Tap to Explore</span>
+        </div>
+      )}
 
       <style dangerouslySetInnerHTML={{
         __html: `
