@@ -97,18 +97,18 @@ const MemberSection = ({
   member,
   isActive,
   onClick,
-  audioUnlocked
+  isPlaying,
+  setIsPlaying
 }: {
   member: FamilyMember;
   isActive: boolean;
   onClick: () => void;
-  audioUnlocked: boolean;
+  isPlaying: boolean;
+  setIsPlaying: (v: boolean) => void;
   key?: string;
 }) => {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   // Sort menus by release date (descending)
   const sortedMenus = [...member.drinkLine.menus].sort((a, b) =>
     new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
@@ -119,36 +119,6 @@ const MemberSection = ({
     if (!isActive) setSelectedMenu(null);
   }, [isActive]);
 
-  useEffect(() => {
-    if (isActive && audioUnlocked) {
-      setIsPlaying(true);
-    }
-  }, [isActive, audioUnlocked]);
-
-  // Handle Audio Playback
-  // Handle Audio Playback
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isActive && isPlaying && audioUnlocked) {
-      // 只在切换音源时才 load
-      if (audio.readyState === 0) {
-        audio.load();
-      }
-      audio.play().catch(() => { });
-    } else {
-      audio.pause();
-    }
-  }, [isActive, isPlaying, audioUnlocked]);
-
-  // 切换成员时重新加载音源
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.load();
-    }
-  }, [member.drinkLine.audioSrc]);
-
   return (
     <motion.section
       layout
@@ -158,14 +128,9 @@ const MemberSection = ({
         if (!isActive) {
           onClick();
           setIsPlaying(true);
-          if (audioRef.current) {
-            audioRef.current.load();
-            audioRef.current.play().catch(() => setIsPlaying(false));
-          }
         }
       }}
     >
-      <audio ref={audioRef} loop src={member.drinkLine.audioSrc} />
       {/* Background Text Decor */}
       <div className="absolute top-10 -left-10 opacity-[0.05] pointer-events-none select-none">
         <h1 className="text-[20vw] font-serif whitespace-nowrap uppercase">{member.name}</h1>
@@ -397,6 +362,8 @@ export default function App() {
   const [activeMemberId, setActiveMemberId] = useState<string>('chenxi');
   const [isScrolled, setIsScrolled] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -413,8 +380,34 @@ export default function App() {
     return () => window.removeEventListener('click', unlock);
   }, []);
 
+  const activeMember = FAMILY_MEMBERS.find(m => m.id === activeMemberId)!;
+
+  // 切换成员或解锁音频时，加载并播放对应音源
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.src = activeMember.drinkLine.audioSrc;
+    audio.load();
+    if (audioUnlocked && isPlaying) {
+      audio.play().catch(() => { });
+    }
+  }, [activeMemberId, audioUnlocked]);
+
+  // 手动点暂停/播放按钮时
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying && audioUnlocked) {
+      audio.play().catch(() => { });
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
+
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
+      <audio ref={audioRef} loop />
+
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-6 py-4 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}>
@@ -454,7 +447,8 @@ export default function App() {
             member={member}
             isActive={activeMemberId === member.id}
             onClick={() => setActiveMemberId(member.id)}
-            audioUnlocked={audioUnlocked}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
           />
         ))}
       </main>
