@@ -326,7 +326,105 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
               tags: ['甜点', '香芋']
             }
           ]
-        }
+        },
+        {
+          id: 'chenxi-melinda-2026',
+          title: '2026春日特辑：Melinda',
+          releaseDate: '2026-03-25',
+          description: '大多数坚果会得一种叫做偏头痛的病，会被用各种各样的方式凿开，吃掉。Melinda也是这样一种坚果，有的时候太痛的话，大脑会碎掉一样的，就像是开心果被碾碎，放在奶油尖尖上。',
+          drinks: [
+            {
+              id: 'm26-1',
+              name: '雪顶开心果碎绿茶',
+              description: '茶汤是沉的黄绿色，奶油顶粗糙不规整，绿色碎粒嵌在白色里。宽口矮杯，冷饮。',
+              ingredients: ['绿茶 150ml', '淡奶油 30ml', '开心果碎 5g'],
+              steps: ['绿茶（80°C，2g茶叶泡3分钟）取150ml，冷却至室温后倒入冰杯。', '淡奶油打发至六分，堆在茶面上，不抹平。', '开心果碎撒在奶油顶部，用力一点，让碎粒嵌进去。'],
+              image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=800',
+              tags: ['轻度头痛', '绿茶', '坚果']
+            },
+            {
+              id: 'm26-2',
+              name: '核桃碎杏仁奶',
+              description: '米白色奶液底部有巧克力暗纹扩散未尽，表面核桃碎颗粒分明。厚壁陶杯，热饮。',
+              ingredients: ['杏仁奶 160ml', '70%黑巧克力 10g', '核桃碎 8g'],
+              steps: ['杏仁奶小火加热至60°C。', '黑巧克力掰碎放杯底，热杏仁奶冲入，等30秒再搅拌两圈，不要完全融化。', '核桃碎干锅轻烘，撒在表面。'],
+              image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=800',
+              tags: ['轻度头痛', '杏仁奶', '黑巧']
+            },
+            {
+              id: 'm26-3',
+              name: '夏威夷果樱花奶油雪顶草莓抹茶奶',
+              description: '底层墨绿，中层草莓粉红渗进绿色边缘，顶部奶油白堆着淡黄色果粒。名字很长，杯子也要大一点。高直杯，冷饮。',
+              ingredients: ['抹茶粉 3g', '燕麦奶 120ml', '草莓 2颗', '淡奶油 30ml', '夏威夷果 2颗'],
+              steps: ['抹茶粉用70°C热水30ml调开，加燕麦奶搅匀，倒入冰杯。', '草莓捣成粗泥，铺在抹茶奶上层。', '淡奶油打发堆顶，夏威夷果切粗粒撒在最上面。'],
+              image: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=800',
+              tags: ['轻度头痛', '抹茶', '草莓']
+            },
+            {
+              id: 'm26-4',
+              name: '松子黑巧牛奶',
+              description: '深巧克力棕，表面浮着松子——有的沉下去了，有的还在。矮圆杯，热饮。',
+              ingredients: ['70%黑巧克力 20g', '全脂牛奶 160ml', '松子 8g'],
+              steps: ['黑巧克力隔水融化，加全脂牛奶小火加热至融合，不超过65°C。', '松子干锅焙至微黄，碾碎一半、留整一半，全部撒入杯中，不搅拌。'],
+              image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=800',
+              tags: ['中度头痛', '黑巧', '松子']
+            },
+            {
+              id: 'm26-5',
+              name: '开心果冰淇淋配冷萃咖啡',
+              description: '深棕咖啡液面上一团正在塌陷的浅绿色。冰淇淋边缘在融化，和咖啡交界处变成浑浊的灰绿。宽口矮杯。',
+              ingredients: ['冷萃咖啡 120ml', '开心果冰淇淋 1球'],
+              steps: ['冷萃咖啡（粉水比1:8，冷藏12小时）取120ml倒入冰杯。', '开心果冰淇淋一球，放在咖啡液面上，不搅拌，让它自己慢慢沉。'],
+              image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=800',
+              tags: ['中度头痛', '冷萃', '冰淇淋']
+            },
+            {
+              id: 'm26-6',
+              name: '南瓜籽南瓜Chai拿铁',
+              description: '暖南瓜橙，不透明，表面南瓜籽深绿色散落。厚壁陶杯，热饮。像一碗不承认自己是汤的东西。',
+              ingredients: ['南瓜泥 30g', 'Chai香料粉 1g', '燕麦奶 160ml', '南瓜籽 5g'],
+              steps: ['南瓜泥加Chai香料粉（肉桂、姜、小豆蔻、丁香），燕麦奶小火加热搅匀至融合。', '倒入杯中，南瓜籽撒在表面。不加糖，南瓜本身的甜度够了。'],
+              image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800',
+              tags: ['中度头痛', 'Chai', '南瓜']
+            },
+            {
+              id: 'm26-7',
+              name: '核桃牛奶',
+              description: '杯底巧克力酱的深色往上洇，核桃奶本身是浑浊的灰白。整杯没有一处是清澈的。矮圆杯，热饮。',
+              ingredients: ['核桃 30g', '全脂牛奶 140ml', '70%黑巧克力酱 10ml'],
+              steps: ['核桃加少量热水用搅拌机打成粗浆（不要打太细，留颗粒），加全脂牛奶小火加热搅匀。', '黑巧克力酱倒杯底，核桃牛奶缓缓注入，不搅拌。'],
+              image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&q=80&w=800',
+              tags: ['非常痛', '核桃', '黑巧']
+            },
+            {
+              id: 'm26-8',
+              name: '榛子果酱龙井',
+              description: '茶汤浅黄变浑，杯壁和杯底粘着化不干净的褐色酱痕。透明直壁杯，热饮。不好看。但它是这样的。',
+              ingredients: ['龙井茶 3g', '榛子酱 15g'],
+              steps: ['龙井用80°C热水冲泡2分钟，取茶汤150ml。', '榛子酱放杯底，茶汤直接冲入，搅拌三圈——不会完全化开，会有酱挂在杯壁上。'],
+              image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800',
+              tags: ['非常痛', '龙井', '榛子']
+            },
+            {
+              id: 'm26-9',
+              name: '挂壁黑芝麻糊红枣桂圆奶茶',
+              description: '黑灰色芝麻糊挂在杯壁上滑不下去，中间是浑浊的深红棕色，上层奶白还没来得及融进去。竖长玻璃杯，热饮。每一层都不想跟别的层待在一起，但已经来不及了。',
+              ingredients: ['黑芝麻糊 20ml', '红枣 3颗', '桂圆干 5颗', '红茶 5g', '燕麦奶 40ml'],
+              steps: ['红枣去核、桂圆干加水100ml小火煮10分钟，取汤汁80ml。', '红茶冲泡取60ml，与枣圆汤混合。', '黑芝麻糊先倒杯底，混合茶汤注入，再加燕麦奶，不搅拌。'],
+              image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&q=80&w=800',
+              tags: ['非常痛', '黑芝麻', '红枣桂圆']
+            },
+            {
+              id: 'm26-10',
+              name: '巧克力慕斯',
+              description: '她说她头痛的时候吃巧克力会更痛。我说那就别吃了。她说不行，痛也要吃。这个慕斯没有任何坚果，因为到这一步，坚果已经碎完了。只剩巧克力，和她。',
+              ingredients: ['70%黑巧克力慕斯'],
+              steps: ['甜点，直接享用。'],
+              image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=800',
+              tags: ['甜点', '黑巧克力']
+            }
+          ]
+        },
       ]
     }
   },
