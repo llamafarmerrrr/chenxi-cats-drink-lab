@@ -96,18 +96,19 @@ const DrinkDetail = ({ drink, onClose }: { drink: Drink; onClose: () => void }) 
 const MemberSection = ({
   member,
   isActive,
-  onClick
+  onClick,
+  audioUnlocked
 }: {
   member: FamilyMember;
   isActive: boolean;
   onClick: () => void;
+  audioUnlocked: boolean;
   key?: string;
 }) => {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
   // Sort menus by release date (descending)
   const sortedMenus = [...member.drinkLine.menus].sort((a, b) =>
     new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
@@ -118,16 +119,35 @@ const MemberSection = ({
     if (!isActive) setSelectedMenu(null);
   }, [isActive]);
 
+  useEffect(() => {
+    if (isActive && audioUnlocked) {
+      setIsPlaying(true);
+    }
+  }, [isActive, audioUnlocked]);
+
+  // Handle Audio Playback
   // Handle Audio Playback
   useEffect(() => {
-    if (isActive && isPlaying) {
-      audioRef.current?.play().catch(() => {
-        setIsPlaying(false);
-      });
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isActive && isPlaying && audioUnlocked) {
+      // 只在切换音源时才 load
+      if (audio.readyState === 0) {
+        audio.load();
+      }
+      audio.play().catch(() => { });
     } else {
-      audioRef.current?.pause();
+      audio.pause();
     }
-  }, [isActive, isPlaying]);
+  }, [isActive, isPlaying, audioUnlocked]);
+
+  // 切换成员时重新加载音源
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.load();
+    }
+  }, [member.drinkLine.audioSrc]);
 
   return (
     <motion.section
@@ -138,15 +158,14 @@ const MemberSection = ({
         if (!isActive) {
           onClick();
           setIsPlaying(true);
+          if (audioRef.current) {
+            audioRef.current.load();
+            audioRef.current.play().catch(() => setIsPlaying(false));
+          }
         }
       }}
     >
-      <audio
-        ref={audioRef}
-        loop
-        src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808f3030c.mp3"
-      />
-
+      <audio ref={audioRef} loop src={member.drinkLine.audioSrc} />
       {/* Background Text Decor */}
       <div className="absolute top-10 -left-10 opacity-[0.05] pointer-events-none select-none">
         <h1 className="text-[20vw] font-serif whitespace-nowrap uppercase">{member.name}</h1>
@@ -174,6 +193,7 @@ const MemberSection = ({
                 <span className="text-[10px] uppercase tracking-tighter text-stone-400">Now Playing</span>
                 <span className="text-xs font-medium">{member.drinkLine.musicTitle}</span>
               </div>
+
               <div className="flex items-end gap-0.5 h-4 mb-1">
                 {[...Array(4)].map((_, i) => (
                   <motion.div
@@ -197,6 +217,7 @@ const MemberSection = ({
               >
                 {isPlaying ? <Pause size={18} /> : <Play size={18} />}
               </button>
+
             </div>
           )}
         </div>
@@ -375,11 +396,21 @@ const MemberSection = ({
 export default function App() {
   const [activeMemberId, setActiveMemberId] = useState<string>('chenxi');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const unlock = () => {
+      setAudioUnlocked(true);
+      window.removeEventListener('click', unlock);
+    };
+    window.addEventListener('click', unlock);
+    return () => window.removeEventListener('click', unlock);
   }, []);
 
   return (
@@ -423,6 +454,7 @@ export default function App() {
             member={member}
             isActive={activeMemberId === member.id}
             onClick={() => setActiveMemberId(member.id)}
+            audioUnlocked={audioUnlocked}
           />
         ))}
       </main>

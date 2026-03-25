@@ -21,6 +21,7 @@ export interface DrinkLine {
   title: string;
   subtitle: string;
   musicTitle: string;
+  audioSrc: string;
   themeColor: string;
   mainMenu: Menu;
   menus: Menu[];
