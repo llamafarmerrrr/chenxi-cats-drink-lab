@@ -115,7 +115,7 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
       menus: [
         {
           id: 'chenxi-spring-2026',
-          title: '春日特辑：暗恋与小猫',
+          title: '2026春日特辑：暗恋与小猫',
           releaseDate: '2026-03-20',
           description: '我不知道牵手是什么感觉。但我知道你们用湿漉漉的小舌头舔我的掌心。还是世界上唯二等我回家，看到我的伤口会担心的 living creature。',
           drinks: [
@@ -258,7 +258,7 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
         },
         {
           id: 'chenxi-intern-2026',
-          title: '春日特辑：找实习让我很烦躁',
+          title: '2026春日特辑：找实习让我很烦躁',
           releaseDate: '2026-03-20',
           description: '其实我已经没什么斗志了。只是说回家会被骂死，需要找一个存活的方式。',
           drinks: [
