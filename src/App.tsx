@@ -122,8 +122,9 @@ const MemberSection = ({
   return (
     <motion.section
       layout
-      className={`relative h-full transition-all duration-700 ease-in-out ${isActive ? 'flex-[4] sm:flex-[5] overflow-y-auto' : 'flex-1 cursor-pointer hover:opacity-80 overflow-hidden'
+      className={`relative transition-all duration-700 ease-in-out ${isActive ? 'flex-[4] sm:flex-[5]' : 'flex-1 cursor-pointer hover:opacity-80 overflow-hidden'
         } ${member.drinkLine.themeColor}`}
+      style={isActive ? { overflowY: 'auto', WebkitOverflowScrolling: 'touch' } : {}}
       onClick={() => {
         if (!isActive) {
           onClick();
@@ -136,7 +137,7 @@ const MemberSection = ({
         <h1 className="text-[20vw] font-serif whitespace-nowrap uppercase">{member.name}</h1>
       </div>
 
-      <div className="h-full flex flex-col p-6 sm:p-12 relative z-10">
+      <div className="flex flex-col p-6 sm:p-12 relative z-10">
         {/* Header */}
         <div className="flex justify-between items-start mb-12">
           <div className="flex items-center gap-4">
@@ -192,7 +193,7 @@ const MemberSection = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex-1 flex flex-col overflow-hidden"
+            className="flex-1 flex flex-col"
           >
             <AnimatePresence mode="wait">
               {!selectedMenu ? (
@@ -213,7 +214,7 @@ const MemberSection = ({
                     </p>
                   </div>
 
-                  <div className="space-y-8 overflow-y-auto no-scrollbar pr-2">
+                  <div className="space-y-8 pr-2">
                     {/* Main Menu Section */}
                     <div className="mb-12">
                       <div className="flex items-center gap-4 mb-6">
@@ -281,7 +282,7 @@ const MemberSection = ({
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="flex-1 flex flex-col overflow-hidden"
+                  className="flex-1 flex flex-col"
                 >
                   <button
                     onClick={(e) => {
@@ -298,7 +299,7 @@ const MemberSection = ({
                     <p className="text-sm text-stone-500 italic">{selectedMenu.description}</p>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto no-scrollbar pr-2 pb-20">
+                  <div className="pb-20">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {selectedMenu.drinks.map((drink) => (
                         <motion.div
@@ -364,7 +365,6 @@ export default function App() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [audioReady, setAudioReady] = useState(false);
-  // FIX 3: track whether user has interacted (to hide mobile indicator)
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
@@ -373,16 +373,14 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const activeMember = FAMILY_MEMBERS.find(m => m.id === activeMemberId)!;
+  const activeMember = FAMILY_MEMBERS.find(m => m.id === activeMemberId);
 
-  // FIX 1: Mobile audio — unlock audio on first user gesture (touch or click)
-  // by directly calling play() inside the event handler (synchronous with gesture)
   const tryPlayAudio = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.src !== window.location.origin + activeMember.drinkLine.audioSrc &&
-      audio.src !== activeMember.drinkLine.audioSrc) {
-      audio.src = activeMember.drinkLine.audioSrc;
+    if (!audio || !activeMember) return;
+    const src = activeMember.drinkLine.audioSrc;
+    if (audio.src !== window.location.origin + src && audio.src !== src) {
+      audio.src = src;
       audio.load();
     }
     if (isPlaying) {
@@ -393,7 +391,6 @@ export default function App() {
     }
   }, [activeMember, isPlaying]);
 
-  // On first user interaction (touch/click), directly play audio
   useEffect(() => {
     const unlock = () => {
       setHasInteracted(true);
@@ -409,10 +406,9 @@ export default function App() {
     };
   }, [tryPlayAudio]);
 
-  // When switching members, load new audio and play
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !activeMember) return;
     audio.src = activeMember.drinkLine.audioSrc;
     audio.load();
     if (audioReady && isPlaying) {
@@ -420,7 +416,6 @@ export default function App() {
     }
   }, [activeMemberId]);
 
-  // When toggling play/pause
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -431,20 +426,19 @@ export default function App() {
     }
   }, [isPlaying, audioReady]);
 
+  if (!activeMember) return null;
+
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
       <audio ref={audioRef} loop />
 
-      {/* Navigation — FIX 2: mobile layout uses stacked logo + horizontal nav */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-4 sm:px-6 py-3 sm:py-4 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* Logo area — hide text on mobile, show only icon */}
           <div className="flex items-center gap-2">
             <img src="/chenxi-cats-drink-lab/logo.svg" alt="logo" className="h-7 sm:h-8" />
             <span className="hidden sm:inline font-serif text-xl tracking-tighter">Kiro, Canelé & Chenxi</span>
           </div>
-          {/* Nav buttons — smaller text + tighter gaps on mobile */}
           <div className="flex gap-4 sm:gap-8 text-[10px] sm:text-xs uppercase tracking-widest font-bold text-stone-500">
             <button
               onClick={() => setActiveMemberId('chenxi')}
@@ -468,8 +462,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col sm:flex-row h-dvh pt-16 overflow-x-hidden overflow-y-auto sm:overflow-hidden">
+      {/* Main Content — overflow-x-clip instead of overflow-hidden for Safari */}
+      <main className="flex-1 flex flex-col sm:flex-row h-dvh pt-16" style={{ overflowX: 'clip' }}>
         {FAMILY_MEMBERS.map((member) => (
           <MemberSection
             key={member.id}
@@ -482,7 +476,6 @@ export default function App() {
         ))}
       </main>
 
-      {/* Footer / Mobile Indicator — FIX 3: hide after user interacts */}
       {!hasInteracted && (
         <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-stone-400 animate-bounce">
           <ChevronDown size={20} />
