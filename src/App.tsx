@@ -125,7 +125,7 @@ const MemberSection = ({
 
   return (
     <motion.section
-      className={`relative h-full transition-all duration-700 ease-in-out ${isActive ? 'flex-[4] sm:flex-[5] overflow-y-auto' : 'flex-1 cursor-pointer hover:opacity-80 overflow-hidden'
+      className={`relative transition-all duration-700 ease-in-out ${isActive ? 'flex-[4] sm:flex-[5] sm:overflow-y-auto' : 'flex-1 cursor-pointer hover:opacity-80 overflow-hidden h-24 sm:h-full'
         } ${member.drinkLine.themeColor}`}
       onClick={() => {
         if (!isActive) {
@@ -486,7 +486,7 @@ export default function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col sm:flex-row h-dvh pt-16 overflow-x-hidden overflow-y-auto sm:overflow-hidden">
+      <main className="flex-1 flex flex-col sm:flex-row min-h-dvh sm:h-dvh pt-16 overflow-x-hidden overflow-y-auto sm:overflow-hidden">
         {FAMILY_MEMBERS.map((member) => (
           <MemberSection
             key={member.id}
