@@ -425,6 +425,23 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
             }
           ]
         },
+        {
+          id: 'chenxi-damien-2026',
+          title: '2026 尾巴尖尖特别甜品：Damien 的踏青',
+          releaseDate: '2026-03-26',
+          description: '作为一只高贵的意大利裔瑞士籍阿比西尼亚种大帅哥，Damien最喜欢的就是走上草丛中间，扬起头颅，感受自己的领地。',
+          drinks: [
+            {
+              id: 'd26-1',
+              name: 'Damien 的踏青',
+              description: '虽然家附近没有小河，但是2026年3月末的苏黎世还在不定时的下雨，甚至下冰雹，周围的一切都很湿润，街角有时候也会很偶尔的冒出一些薄荷。你知道的，薄荷有香气。',
+              ingredients: ['薄荷味意式 Gelato'],
+              steps: ['甜点，直接享用。'],
+              image: 'https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&q=80&w=800',
+              tags: ['甜点', 'gelato', '薄荷', 'Damien']
+            }
+          ]
+        }
       ]
     }
   },

@@ -8,7 +8,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-stone-900 bg-stone-50;
+    @apply font-sans text-stone-900 bg-stone-50 overflow-x-hidden;
   }
 }
 
@@ -19,7 +19,12 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+html {
+  overflow-x: hidden;
 }
