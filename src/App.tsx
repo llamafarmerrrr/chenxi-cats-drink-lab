@@ -109,6 +109,7 @@ const MemberSection = ({
 }) => {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [selectedDrink, setSelectedDrink] = useState<Drink | null>(null);
+  const [seasonalVisibleCount, setSeasonalVisibleCount] = useState(3);
   // Sort menus by release date (descending)
   const sortedMenus = [...member.drinkLine.menus].sort((a, b) =>
     new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
@@ -116,12 +117,14 @@ const MemberSection = ({
 
   // Reset selected menu when switching members
   useEffect(() => {
-    if (!isActive) setSelectedMenu(null);
+    if (!isActive) {
+      setSelectedMenu(null);
+      setSeasonalVisibleCount(3);
+    }
   }, [isActive]);
 
   return (
     <motion.section
-      layout
       className={`relative h-full transition-all duration-700 ease-in-out ${isActive ? 'flex-[4] sm:flex-[5] overflow-y-auto' : 'flex-1 cursor-pointer hover:opacity-80 overflow-hidden'
         } ${member.drinkLine.themeColor}`}
       onClick={() => {
@@ -132,7 +135,7 @@ const MemberSection = ({
       }}
     >
       {/* Background Text Decor */}
-      <div className="absolute top-10 -left-10 opacity-[0.05] pointer-events-none select-none">
+      <div className="absolute top-10 -left-10 opacity-[0.05] pointer-events-none select-none overflow-hidden w-full">
         <h1 className="text-[20vw] font-serif whitespace-nowrap uppercase">{member.name}</h1>
       </div>
 
@@ -249,7 +252,7 @@ const MemberSection = ({
                       <div className="h-[1px] flex-1 bg-stone-200" />
                     </div>
 
-                    {sortedMenus.map((menu) => (
+                    {sortedMenus.slice(0, seasonalVisibleCount).map((menu) => (
                       <motion.div
                         key={menu.id}
                         whileHover={{ x: 10 }}
@@ -273,6 +276,20 @@ const MemberSection = ({
                         </div>
                       </motion.div>
                     ))}
+                    {sortedMenus.length > seasonalVisibleCount && (
+                      <motion.div
+                        whileHover={{ x: 10 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSeasonalVisibleCount(prev => prev + 3);
+                        }}
+                        className="group cursor-pointer pb-8 text-center"
+                      >
+                        <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest font-bold text-stone-400 group-hover:text-stone-900 transition-colors">
+                          View More ({sortedMenus.length - seasonalVisibleCount} remaining) <ChevronDown size={12} />
+                        </div>
+                      </motion.div>
+                    )}
                   </div>
                 </motion.div>
               ) : (
@@ -432,7 +449,7 @@ export default function App() {
   }, [isPlaying, audioReady]);
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
+    <div className="min-h-screen bg-stone-50 flex flex-col overflow-x-hidden max-w-[100vw]">
       <audio ref={audioRef} loop />
 
       {/* Navigation — FIX 2: mobile layout uses stacked logo + horizontal nav */}
