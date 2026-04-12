@@ -590,7 +590,7 @@ export const FAMILY_MEMBERS: FamilyMember[] = [
     name: 'Canelé',
     role: 'Head of Mischief',
     description: 'Small, dark, and sweet—just like the pastry she was named after.',
-    avatar: 'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&q=80&w=400',
+    avatar: '/chenxi-cats-drink-lab/Canele_head.png',
     drinkLine: {
       id: 'canele-line',
       title: "Canelé's Dark Kitchen",
